@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 import FallingBeam from '@/components/FallingBeam';
 
 // Register ScrollTrigger plugin
@@ -32,13 +33,12 @@ export default function Home() {
 
   const startDate = new Date('2025-01-25'); 
   
-  // Replace the memories array with simplified version
+  // Update the memories array to include the image
   const memories = [
-    { description: 'Our first date at the park' },
-    { description: 'The concert where we danced all night' },
-    { description: 'Our trip to the beach' },
-    { description: 'When we cooked dinner together for the first time' },
-    { description: 'The day we moved in together' }
+    { 
+      description: 'Älskar kravaller med dig',
+      image: '/pictures/kravall.jpg'  // Path relative to the public directory
+    },
   ];
   
   // Update timeline events without images
@@ -165,7 +165,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      {/* FallingBeam as background */}
+      {/* FallingBeam as background for the entire page */}
       <div className="fixed inset-0 z-0">
         <FallingBeam 
           beamCount={100} 
@@ -207,7 +207,7 @@ export default function Home() {
             onClick={showRandomMemory} 
             className="mt-8 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105"
           >
-            Tryck för ett minne
+            Tryck på mig
           </button>
         </section>
         
@@ -247,7 +247,7 @@ export default function Home() {
           
           {/* Final message */}
           <div className="text-center mt-20 px-4">
-            <h3 className="text-3xl font-bold text-white mb-4">Ser fram emot att skapa många fler fina minnen med dig!</h3>
+            <h3 className="text-3xl font-bold text-white mb-4">+ Många många fler!</h3>
             <p className="text-lg max-w-2xl mx-auto text-white">Jag älskar dig.</p>
           </div>
         </section>
@@ -257,26 +257,39 @@ export default function Home() {
       {showMemory && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={() => setShowMemory(false)}>
           <div className="bg-black rounded-lg max-w-lg w-full overflow-hidden border border-white border-opacity-30" onClick={e => e.stopPropagation()}>
-            <div className="p-4">
-              <p className="text-lg text-center text-white">{memories[currentMemory].description}</p>
+            <div className="relative p-4">
+              {/* Back button at the top */}
+              <button 
+                onClick={() => setShowMemory(false)}
+                className="absolute top-0 right-0 bg-white hover:bg-gray-200 text-pink-600 px-3 py-1 rounded-lg font-bold m-2"
+              >
+                Tillbaka
+              </button>
+              
+              {/* Image display */}
+              <div className="relative w-full h-64 mb-4 mt-8">
+                <Image
+                  src={memories[currentMemory].image}
+                  alt="Memory"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  className="rounded-2xl"
+                />
+              </div>
+              
+              <p className="text-lg text-center text-white mb-4">{memories[currentMemory].description}</p>
               <div className="flex justify-between mt-4">
                 <button 
                   onClick={() => setCurrentMemory(prev => (prev === 0 ? memories.length - 1 : prev - 1))}
                   className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg"
                 >
-                  Previous
-                </button>
-                <button 
-                  onClick={() => setShowMemory(false)}
-                  className="bg-white hover:bg-gray-200 text-pink-600 px-4 py-2 rounded-lg font-bold"
-                >
-                  Tillbaka
+                  Förra
                 </button>
                 <button 
                   onClick={() => setCurrentMemory(prev => (prev === memories.length - 1 ? 0 : prev + 1))}
                   className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg"
                 >
-                  Next
+                  Nästa
                 </button>
               </div>
             </div>
