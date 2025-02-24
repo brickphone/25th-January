@@ -44,29 +44,29 @@ export default function Home() {
   // Update timeline events without images
   const timelineEvents = [
     { 
-      title: 'How We Met', 
-      date: 'February 24, 2024', 
-      description: 'I saw you across the room and knew I had to talk to you.'
+      title: 'Första gången vi träffades', 
+      date: '15 november 2024', 
+      description: 'Ganska gott med öl.'
     },
     { 
-      title: 'First Date', 
-      date: 'March 10, 2024', 
-      description: 'Coffee and a walk in the park. I was so nervous, but you made it easy.'
+      title: 'Andra gången vi träffades', 
+      date: '18 november 2024', 
+      description: "Otroligt gott med lasagne faktiskt!"
     },
     { 
-      title: 'First Kiss', 
-      date: 'March 24, 2024', 
-      description: "Under the stars at the viewpoint. A moment I will never forget."
+      title: 'Julklappslek med familjen Laurell', 
+      date: '18 december 2024', 
+      description: "Jag var fan livrädd."
     },
     { 
-      title: 'Made It Official', 
-      date: 'April 15, 2024', 
-      description: "When you asked \"Are we a thing?\" and I could not say yes fast enough."
+      title: 'Första gången vi sa att vi älskade varandra', 
+      date: '18 januari 2025', 
+      description: 'Sket nästan på mig.'
     },
     { 
-      title: 'First Trip Together', 
-      date: 'June 10, 2024', 
-      description: 'That weekend getaway where we got lost and found the best hidden restaurant.'
+      title: 'TILSAMMANS!!', 
+      date: '25 januari 2025', 
+      description: 'Väldigt tacksam över dig.'
     }
   ];
   
@@ -160,7 +160,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <Head>
-        <title>Our Special Journey Together</title>
+        <title>HEJJJJ</title>
         <meta name="description" content="A celebration of our love story" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -207,13 +207,13 @@ export default function Home() {
             onClick={showRandomMemory} 
             className="mt-8 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105"
           >
-            Click For A Memory
+            Tryck för ett minne
           </button>
         </section>
         
         {/* Timeline Section */}
         <section ref={timelineRef} className="min-h-screen pb-20">
-          <h2 className="text-4xl font-bold text-center text-white pt-10 mb-12">Our Love Story</h2>
+          <h2 className="text-4xl font-bold text-center text-white pt-10 mb-12">(Väldigt, väldigt) Sammanfattad tidslinje</h2>
           
           <div className="relative max-w-3xl mx-auto px-4">
             {/* Vertical line */}
@@ -247,8 +247,8 @@ export default function Home() {
           
           {/* Final message */}
           <div className="text-center mt-20 px-4">
-            <h3 className="text-3xl font-bold text-white mb-4">Here&apos;s to many more beautiful memories together!</h3>
-            <p className="text-lg max-w-2xl mx-auto text-white">I love you more each day, and I can&apos;t wait to see what the future holds for us. Thank you for being my partner, my best friend, and my favorite person.</p>
+            <h3 className="text-3xl font-bold text-white mb-4">Ser fram emot att skapa många fler fina minnen med dig!</h3>
+            <p className="text-lg max-w-2xl mx-auto text-white">Jag älskar dig.</p>
           </div>
         </section>
       </main>
@@ -265,6 +265,12 @@ export default function Home() {
                   className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg"
                 >
                   Previous
+                </button>
+                <button 
+                  onClick={() => setShowMemory(false)}
+                  className="bg-white hover:bg-gray-200 text-pink-600 px-4 py-2 rounded-lg font-bold"
+                >
+                  Tillbaka
                 </button>
                 <button 
                   onClick={() => setCurrentMemory(prev => (prev === memories.length - 1 ? 0 : prev + 1))}
