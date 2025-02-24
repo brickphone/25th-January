@@ -3,7 +3,6 @@
 // File: pages/index.js
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import FallingBeam from '@/components/FallingBeam';
