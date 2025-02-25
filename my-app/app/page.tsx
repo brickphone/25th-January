@@ -7,6 +7,8 @@ import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import FallingBeam from '@/components/FallingBeam';
+import kravall_puss from "../public/pictures/kravall_puss.jpeg";
+import kravall_2 from "../public/pictures/kravall_2.jpeg";
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {
@@ -33,11 +35,15 @@ export default function Home() {
 
   const startDate = new Date('2025-01-25'); 
   
-  // Update the memories array to include the image
+  // Update the memories array with an absolute URL
   const memories = [
     { 
-      description: 'Älskar kravaller med dig',
-      image: '/pictures/kravall.jpg'  // Path relative to the public directory
+      description: 'Älskar att gå på kravaller med dig ❤️',
+      image: kravall_puss
+    },
+    {
+      description: 'Älskar att gå på kravaller med dig ❤️',
+      image: kravall_2
     },
   ];
   
@@ -179,10 +185,12 @@ export default function Home() {
         <section className="h-screen flex flex-col items-center justify-center px-4 text-center">
           <h1 className="text-5xl font-bold text-white mb-10">Grattis på månadsdagen!</h1>
           
-          {/* Counter - moved outside of box */}
+          {/* Counter - improved mobile layout */}
           <div className="mb-10">
             <p className="text-lg mb-4 text-white">Vi har varit tillsammans i:</p>
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+            
+            {/* First row - months, days, hours */}
+            <div className="grid grid-cols-3 gap-6 mb-4">
               <div className="text-center">
                 <div className="text-4xl font-bold text-white">{timeDifference.months}</div>
                 <div className="text-white">Månader</div>
@@ -194,6 +202,14 @@ export default function Home() {
               <div className="text-center">
                 <div className="text-4xl font-bold text-white">{timeDifference.hours}</div>
                 <div className="text-white">Timmar</div>
+              </div>
+            </div>
+            
+            {/* Second row - minutes and seconds centered */}
+            <div className="grid grid-cols-2 gap-6 max-w-xs mx-auto">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-white">{timeDifference.minutes}</div>
+                <div className="text-white">Minuter</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-white">{timeDifference.seconds}</div>
@@ -255,7 +271,12 @@ export default function Home() {
       
       {/* Memory Modal */}
       {showMemory && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={() => setShowMemory(false)}>
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50 p-4" onClick={() => setShowMemory(false)}>
+          {/* Description text moved outside and made bigger */}
+          <p className="text-2xl font-medium text-white mb-6 text-center max-w-2xl">
+            {memories[currentMemory].description}
+          </p>
+          
           <div className="bg-black rounded-lg max-w-lg w-full overflow-hidden border border-white border-opacity-30" onClick={e => e.stopPropagation()}>
             <div className="relative p-4">
               {/* Back button at the top */}
@@ -267,17 +288,20 @@ export default function Home() {
               </button>
               
               {/* Image display */}
-              <div className="relative w-full h-64 mb-4 mt-8">
+              <div className="relative w-full h-64 mb-4">
                 <Image
                   src={memories[currentMemory].image}
                   alt="Memory"
                   fill
                   style={{ objectFit: 'contain' }}
                   className="rounded-2xl"
+                  priority
+                  onError={(e) => {
+                    console.error('Image failed to load:', e);
+                  }}
                 />
               </div>
               
-              <p className="text-lg text-center text-white mb-4">{memories[currentMemory].description}</p>
               <div className="flex justify-between mt-4">
                 <button 
                   onClick={() => setCurrentMemory(prev => (prev === 0 ? memories.length - 1 : prev - 1))}
