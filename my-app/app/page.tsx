@@ -9,6 +9,7 @@ import Image from 'next/image';
 import FallingBeam from '@/components/FallingBeam';
 import kravall_puss from "../public/pictures/kravall_puss.jpeg";
 import kravall_2 from "../public/pictures/kravall_2.jpeg";
+import kravall_3 from "../public/pictures/kravall_3.jpeg";
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {
@@ -45,6 +46,10 @@ export default function Home() {
       description: 'Älskar att gå på kravaller med dig ❤️',
       image: kravall_2
     },
+    {
+      description: "Älskar att gå på kravaller med dig ❤️",
+      image: kravall_3
+    }
   ];
   
   // Update timeline events without images
@@ -273,26 +278,19 @@ export default function Home() {
       {showMemory && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50 p-4" onClick={() => setShowMemory(false)}>
           {/* Description text moved outside and made bigger */}
-          <p className="text-2xl font-medium text-white mb-6 text-center max-w-2xl">
+          <p className="text-3xl font-medium text-white mb-6 text-center max-w-2xl">
             {memories[currentMemory].description}
           </p>
           
-          <div className="bg-black rounded-lg max-w-lg w-full overflow-hidden border border-white border-opacity-30" onClick={e => e.stopPropagation()}>
+          <div className="bg-black rounded-lg max-w-lg w-full overflow-hidden border-opacity-30" onClick={e => e.stopPropagation()}>
             <div className="relative p-4">
-              {/* Back button at the top */}
-              <button 
-                onClick={() => setShowMemory(false)}
-                className="absolute top-0 right-0 bg-white hover:bg-gray-200 text-pink-600 px-3 py-1 rounded-lg font-bold m-2"
-              >
-                Tillbaka
-              </button>
               
               {/* Image display */}
-              <div className="relative w-full h-64 mb-4">
+              <div className="relative w-full mb-4">
                 <Image
                   src={memories[currentMemory].image}
                   alt="Memory"
-                  fill
+                  
                   style={{ objectFit: 'contain' }}
                   className="rounded-2xl"
                   priority
