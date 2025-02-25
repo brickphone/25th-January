@@ -55,6 +55,10 @@ interface TimelineEvent {
   description: string;
 }
 
+// Add this at the top of your file to disable SSR for this page
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
 export default function Home() {
   // State for anniversary date and time difference
   const [timeDifference, setTimeDifference] = useState<TimeDifference>({
@@ -228,40 +232,49 @@ export default function Home() {
     });
   }, [startDate]);
   
-  // Update the timeline animation
-  const initializeTimeline = (): void => {
+  // Wrap initializeTimeline in useCallback to prevent recreation
+  const initializeTimeline = useCallback(() => {
     if (typeof window !== 'undefined' && timelineRef.current) {
-      gsap.utils.toArray<HTMLElement>('.timeline-event').forEach((event) => {
-        gsap.fromTo(
+      // Reduce the number of animations
+      const events = gsap.utils.toArray<HTMLElement>('.timeline-event');
+      
+      // Create one timeline for all events instead of individual animations
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: timelineRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+      
+      // Add all events to the timeline
+      events.forEach((event) => {
+        tl.fromTo(
           event,
           { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: event,
-              start: 'top 80%',
-              end: 'bottom 20%',
-              toggleActions: 'play none none reverse'
-            }
-          }
+          { opacity: 1, y: 0, duration: 0.3 },
+          "-=0.1" // Slight overlap for smoother animation
         );
-        
-        const hearts = event.querySelectorAll<HTMLElement>('.heart');
-        hearts.forEach((heart: HTMLElement) => {
-          gsap.to(heart, {
-            y: -20,
-            opacity: 0,
-            duration: 1.5,
-            repeat: -1,
-            ease: 'power1.out',
-            delay: Math.random() * 2
-          });
+      });
+      
+      // Reduce the number of heart animations
+      const hearts = document.querySelectorAll<HTMLElement>('.heart');
+      // Only animate a subset of hearts to reduce load
+      const heartsToAnimate = Array.from(hearts).slice(0, 10);
+      
+      heartsToAnimate.forEach((heart: HTMLElement) => {
+        gsap.to(heart, {
+          y: -10,
+          opacity: 0,
+          duration: 2,
+          repeat: -1,
+          ease: 'power1.out',
+          delay: Math.random()
         });
       });
     }
-  };
+  }, []);
   
   // Show a random memory
   const showRandomMemory = (): void => {
@@ -283,16 +296,26 @@ export default function Home() {
     }, 10);
   };
   
-  // Initialize counter and timeline on component mount
+  // Also modify your useEffect to use a cleanup function for GSAP
   useEffect(() => {
     calculateTimeDifference();
     const interval = setInterval(calculateTimeDifference, 1000);
     
-    // Initialize GSAP timeline
-    initializeTimeline();
+    // Add a small delay before initializing GSAP
+    const timelineTimeout = setTimeout(() => {
+      initializeTimeline();
+    }, 500);
     
-    return () => clearInterval(interval);
-  }, [calculateTimeDifference]);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timelineTimeout);
+      // Kill all GSAP animations on unmount
+      if (typeof window !== 'undefined') {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        gsap.killTweensOf('*');
+      }
+    };
+  }, [calculateTimeDifference, initializeTimeline]);
   
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
