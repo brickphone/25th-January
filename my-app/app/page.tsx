@@ -1,11 +1,11 @@
 'use client'
 
 // File: pages/index.tsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import FallingBeam from '@/components/FallingBeam';
 import Confetti from '@/components/Confetti';
 import kravall_puss from "../public/pictures/kravall_puss.jpeg";
@@ -28,7 +28,7 @@ import dejt_1 from "../public/pictures/dejt_1.jpeg";
 import dejt_2 from "../public/pictures/dejt_2.jpeg";
 import dejt_3 from "../public/pictures/dejt_3.jpeg";
 import dejt_4 from "../public/pictures/dejt_4.jpeg";
-import dejt_5 from "../public/pictures/dejt_5.jpeg";
+import dejt_5 from "../public/pictures/dejt_5.jpeg"; 
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {
@@ -46,7 +46,7 @@ interface TimeDifference {
 
 interface Memory {
   description: string;
-  image: any; // Using 'any' for imported images, but you could be more specific
+  image: StaticImageData;
 }
 
 interface TimelineEvent {
@@ -195,7 +195,7 @@ export default function Home() {
   ];
   
   // Calculate time difference function
-  const calculateTimeDifference = (): void => {
+  const calculateTimeDifference = useCallback((): void => {
     const now = new Date();
     // Calculate time elapsed since the start date (positive value)
     const diffTime = Math.abs(now.getTime() - startDate.getTime());
@@ -226,7 +226,7 @@ export default function Home() {
       minutes: diffMinutes,
       seconds: diffSeconds
     });
-  };
+  }, [startDate]);
   
   // Update the timeline animation
   const initializeTimeline = (): void => {
@@ -292,7 +292,7 @@ export default function Home() {
     initializeTimeline();
     
     return () => clearInterval(interval);
-  }, []);
+  }, [calculateTimeDifference]);
   
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -303,7 +303,7 @@ export default function Home() {
       </Head>
       
       {/* Confetti component */}
-      <Confetti isActive={showConfetti} duration={3000} particleCount={150} />
+      <Confetti isActive={showConfetti} />
       
       {/* FallingBeam as background for the entire page */}
       <div className="fixed inset-0 z-0">
