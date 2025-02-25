@@ -1,12 +1,13 @@
 'use client'
 
-// File: pages/index.js
+// File: pages/index.tsx
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import FallingBeam from '@/components/FallingBeam';
+import Confetti from '@/components/Confetti';
 import kravall_puss from "../public/pictures/kravall_puss.jpeg";
 import kravall_2 from "../public/pictures/kravall_2.jpeg";
 import kravall_3 from "../public/pictures/kravall_3.jpeg";
@@ -16,9 +17,29 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Define interfaces for our data structures
+interface TimeDifference {
+  months: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+interface Memory {
+  description: string;
+  image: any; // Using 'any' for imported images, but you could be more specific
+}
+
+interface TimelineEvent {
+  title: string;
+  date: string;
+  description: string;
+}
+
 export default function Home() {
   // State for anniversary date and time difference
-  const [timeDifference, setTimeDifference] = useState({
+  const [timeDifference, setTimeDifference] = useState<TimeDifference>({
     months: 0,
     days: 0,
     hours: 0,
@@ -27,17 +48,19 @@ export default function Home() {
   });
   
   // State for memory modal
-  const [showMemory, setShowMemory] = useState(false);
-  const [currentMemory, setCurrentMemory] = useState(0);
+  const [showMemory, setShowMemory] = useState<boolean>(false);
+  const [currentMemory, setCurrentMemory] = useState<number>(0);
+  
+  // State for confetti
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
   
   // Ref for timeline section
-  const timelineRef = useRef(null);
+  const timelineRef = useRef<HTMLElement | null>(null);
   
-
   const startDate = new Date('2025-01-25'); 
   
   // Update the memories array with an absolute URL
-  const memories = [
+  const memories: Memory[] = [
     { 
       description: 'Älskar att gå på kravaller med dig ❤️',
       image: kravall_puss
@@ -53,7 +76,7 @@ export default function Home() {
   ];
   
   // Update timeline events without images
-  const timelineEvents = [
+  const timelineEvents: TimelineEvent[] = [
     { 
       title: 'Första gången vi träffades', 
       date: '15 november 2024', 
@@ -82,7 +105,7 @@ export default function Home() {
   ];
   
   // Calculate time difference function
-  const calculateTimeDifference = () => {
+  const calculateTimeDifference = (): void => {
     const now = new Date();
     // Calculate time elapsed since the start date (positive value)
     const diffTime = Math.abs(now.getTime() - startDate.getTime());
@@ -116,7 +139,7 @@ export default function Home() {
   };
   
   // Update the timeline animation
-  const initializeTimeline = () => {
+  const initializeTimeline = (): void => {
     if (typeof window !== 'undefined' && timelineRef.current) {
       gsap.utils.toArray<HTMLElement>('.timeline-event').forEach((event) => {
         gsap.fromTo(
@@ -151,10 +174,19 @@ export default function Home() {
   };
   
   // Show a random memory
-  const showRandomMemory = () => {
+  const showRandomMemory = (): void => {
     const randomIndex = Math.floor(Math.random() * memories.length);
     setCurrentMemory(randomIndex);
     setShowMemory(true);
+  };
+
+  // Handler for next button click with confetti
+  const handleNextClick = (): void => {
+    setCurrentMemory(prev => (prev === memories.length - 1 ? 0 : prev + 1));
+    // Trigger confetti
+    setShowConfetti(true);
+    // Reset confetti after animation duration
+    setTimeout(() => setShowConfetti(false), 3000);
   };
   
   // Initialize counter and timeline on component mount
@@ -175,6 +207,9 @@ export default function Home() {
         <meta name="description" content="A celebration of our love story" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
+      {/* Confetti component */}
+      <Confetti isActive={showConfetti} duration={3000} particleCount={150} />
       
       {/* FallingBeam as background for the entire page */}
       <div className="fixed inset-0 z-0">
@@ -233,7 +268,7 @@ export default function Home() {
         </section>
         
         {/* Timeline Section */}
-        <section ref={timelineRef} className="min-h-screen pb-20">
+        <section ref={timelineRef as React.RefObject<HTMLElement>} className="min-h-screen pb-20">
           <h2 className="text-4xl font-bold text-center text-white pt-10 mb-12">(Väldigt, väldigt) Sammanfattad tidslinje</h2>
           
           <div className="relative max-w-3xl mx-auto px-4">
@@ -286,13 +321,13 @@ export default function Home() {
             <div className="relative p-4">
               
               {/* Image display */}
-              <div className="relative w-full mb-4">
+              <div className="mb-4 w-[320px] h-[400px]">
                 <Image
                   src={memories[currentMemory].image}
                   alt="Memory"
-                  
-                  style={{ objectFit: 'contain' }}
-                  className="rounded-2xl"
+                  width={400}
+                  height={400}
+                  className="rounded-2xl w-full h-full object-cover"
                   priority
                   onError={(e) => {
                     console.error('Image failed to load:', e);
@@ -308,7 +343,7 @@ export default function Home() {
                   Förra
                 </button>
                 <button 
-                  onClick={() => setCurrentMemory(prev => (prev === memories.length - 1 ? 0 : prev + 1))}
+                  onClick={handleNextClick}
                   className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg"
                 >
                   Nästa
