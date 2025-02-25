@@ -182,11 +182,15 @@ export default function Home() {
 
   // Handler for next button click with confetti
   const handleNextClick = (): void => {
+    // Change to next image
     setCurrentMemory(prev => (prev === memories.length - 1 ? 0 : prev + 1));
-    // Trigger confetti
-    setShowConfetti(true);
-    // Reset confetti after animation duration
-    setTimeout(() => setShowConfetti(false), 3000);
+    
+    // Simple confetti trigger
+    setShowConfetti(false);
+    setTimeout(() => {
+      setShowConfetti(true);
+      // No need for reset timeout as the effect is brief
+    }, 10);
   };
   
   // Initialize counter and timeline on component mount
@@ -343,6 +347,7 @@ export default function Home() {
                   Förra
                 </button>
                 <button 
+                  id='next-up-button'
                   onClick={handleNextClick}
                   className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg"
                 >
