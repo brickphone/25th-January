@@ -11,6 +11,24 @@ import Confetti from '@/components/Confetti';
 import kravall_puss from "../public/pictures/kravall_puss.jpeg";
 import kravall_2 from "../public/pictures/kravall_2.jpeg";
 import kravall_3 from "../public/pictures/kravall_3.jpeg";
+import mat_1 from "../public/pictures/mat_1.jpeg";
+import mat_2 from "../public/pictures/mat_2.jpeg";
+import mat_3 from "../public/pictures/mat_3.jpeg";
+import gym_1 from "../public/pictures/gym_1.jpeg";
+import gym_2 from "../public/pictures/gym_2.jpeg";
+import vandra_1 from "../public/pictures/vandra_1.jpeg";
+import vandra_2 from "../public/pictures/vandra_2.jpeg";
+import vandra_3 from "../public/pictures/vandra_3.jpeg";
+import pussla from "../public/pictures/pussla.jpeg";
+import mysa_1 from "../public/pictures/mysa_1.jpeg";
+import mysa_2 from "../public/pictures/mysa_2.jpeg";
+import mysa_3 from "../public/pictures/mysa_3.jpeg";
+import train from "../public/pictures/train.jpeg";
+import dejt_1 from "../public/pictures/dejt_1.jpeg";
+import dejt_2 from "../public/pictures/dejt_2.jpeg";
+import dejt_3 from "../public/pictures/dejt_3.jpeg";
+import dejt_4 from "../public/pictures/dejt_4.jpeg";
+import dejt_5 from "../public/pictures/dejt_5.jpeg";
 
 // Register ScrollTrigger plugin
 if (typeof window !== 'undefined') {
@@ -72,6 +90,78 @@ export default function Home() {
     {
       description: "Älskar att gå på kravaller med dig ❤️",
       image: kravall_3
+    },
+    { 
+      description: 'Älskar att (lära mig) laga mat med dig ❤️',
+      image: mat_1
+    },
+    {
+      description: 'Älskar att (lära mig) laga mat med dig ❤️',
+      image: mat_2
+    },
+    {
+      description: "Älskar att (lära mig) laga mat med dig ❤️",
+      image: mat_3
+    },
+    {
+      description: 'Älskar att gymma med dig ❤️',
+      image: gym_1
+    },
+    {
+      description: "Älskar att gymma med dig ❤️",
+      image: gym_2
+    },
+    {
+      description: "Älskar att vandra med dig ❤️",
+      image: vandra_1
+    },
+    {
+      description: 'Älskar att vandra med dig ❤️',
+      image: vandra_2
+    },
+    {
+      description: "Älskar att vandra med dig❤️",
+      image: vandra_3
+    },
+    {
+      description: "Älskar att pussla med dig❤️",
+      image: pussla
+    },
+    {
+      description: 'Älskar att mysa med dig❤️',
+      image: mysa_1
+    },
+    {
+      description: "Älskar att mysa med dig❤️",
+      image: mysa_2
+    },
+    {
+      description: "Älskar att mysa med dig❤️",
+      image: mysa_3
+    },
+    {
+      description: "Älskar att åka tåg med dig❤️",
+      image: train
+    },
+    {
+      description: "Älskar att gå på mysiga dejter med dig❤️",
+      image: dejt_1
+    },
+    {
+      description: 'Älskar att gå på mysiga dejter med dig❤️',
+      image: dejt_2
+    },
+    {
+      description: "Älskar att gå på mysiga dejter med dig❤️",
+      image: dejt_3
+    },
+    {
+      description: "Älskar att gå på mysiga dejter med dig❤️",
+      image: dejt_4
+    },
+    {
+      description: "Älskar att gå på mysiga dejter med dig❤️",
+      image: dejt_5
     }
   ];
   
